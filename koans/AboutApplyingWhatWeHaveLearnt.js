@@ -107,26 +107,144 @@ describe("About Applying What We Have Learnt", function() {
 
   /*********************************************************************************/
   /* UNCOMMENT FOR EXTRA CREDIT */
-  /*
-  it("should find the largest prime factor of a composite number", function () {
 
+  it("should find the largest prime factor of a composite number", function () {
+    var prime_sieve = function(max) {
+      var primes = [];
+      var possible = _.range(max);
+      possible[0] = undefined;
+      possible[1] = undefined;
+      for (var i = 2; i < possible.length; i++) {
+        for (var j = i; j < possible.length; j += i) {
+          if(j !== i) {
+           possible[j] = undefined;
+          }
+        }
+      }
+      possible.forEach(function(item) {
+        if (item) {
+          primes.push(item);
+        }
+      });
+      return primes;
+    };
+    var primeFactor = function(composite) {
+      if (composite < 2) {
+        return undefined;
+      }
+
+      return prime_sieve(composite / 2 + 1).reduce(function(memo, prime) {
+        if (composite % prime === 0 && prime > memo) {
+          return prime;
+        } else {
+          return memo;
+        }
+      }, 0);
+    };
+    expect(primeFactor(226)).toBe(113);
+    expect(primeFactor(1000)).toBe(5);
   });
 
   it("should find the largest palindrome made from the product of two 3 digit numbers", function () {
+    var palindromes = [];
+
+    var isPalindrome = function(num) {
+      var strNum = String(num);
+      var checkLen = Math.floor((strNum.length / 2));
+      var firstHalf = strNum.slice(0,checkLen);
+      var lastHalf = strNum.slice(-checkLen);
+      return firstHalf === lastHalf.split('').reverse().join('');
+    };
+
+    var jLowerLimit = 100;
+
+    for (var i = 999; i > 100; i--) {
+      for (var j = 999; j > jLowerLimit; j--) {
+        if (isPalindrome(i * j)) {
+          palindromes.push(i * j);
+          jLowerLimit = j;
+        }
+      }
+    }
+
+    var largestPalindrome = Math.max.apply(null, palindromes);
     
+    expect(largestPalindrome).toBe(906609);
   });
 
   it("should find the smallest number divisible by each of the numbers 1 to 20", function () {
-      
+
+    var findSmallest = function() {
+      var nextNum = 1;
+      var incrementor = 0;
+      var result;
+      var i = 1;
+
+      while (i <= 20) {
+        if (nextNum % i === 0) {
+          i++;
+          result = nextNum;
+        } else {
+          nextNum += result;
+        }
+      }
+
+      return result;
+    };
+
+    expect(findSmallest()).toBe(232792560);
     
   });
 
   it("should find the difference between the sum of the squares and the square of the sums", function () {
-    
+    var difference = function(num) {
+
+      var sumOfSquares = function() {
+        return _.range(1,num + 1).map(function(item){
+          return item * item;
+        }).reduce(function(total, current) {
+          return total + current;
+        });
+      };
+
+      var squareOfSums = function() {
+        var sum = _.range(1, num + 1).reduce(function(total, current) {
+          return total + current;
+        });
+        return sum * sum;
+      };
+      return squareOfSums() - sumOfSquares();
+    };
+
+    expect(difference(3)).toBe(22);
   });
 
   it("should find the 10001st prime", function () {
+    var prime_sieve = function(max) {
+      var primes = [];
+      var possible = _.range(max);
+      possible[0] = undefined;
+      possible[1] = undefined;
+      for (var i = 2; i < possible.length; i++) {
+        for (var j = i; j < possible.length; j += i) {
+          if(j !== i) {
+           possible[j] = undefined;
+          }
+        }
+      }
+      possible.forEach(function(item) {
+        if (item) {
+          primes.push(item);
+        }
+      });
+      return primes;
+    };
 
+    var primeList = prime_sieve(200000);
+
+    var result = primeList[10001 - 1];
+
+    expect(result).toBe(104743);
   });
-  */
+
 });
